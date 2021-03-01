@@ -3,7 +3,7 @@ import numpy as np
 def fun01(r):
     return (3 - 2 * r + np.sqrt(1 + 4 * r - 4 * r * r)) / 8.0
 
-def delta(r):
+def dlta(r):
     if r < -2.0:
         return 0
     elif r < -1:
@@ -17,5 +17,5 @@ def delta(r):
     else:
         return 0
     
-def delta_h(r,h):
-    return 1/h * delta(r / h)
+def delta_h(x,h):
+    return dlta(x / h) / h
