@@ -28,7 +28,6 @@ def second_integration(FF, XY, h, J, K, d_theta):
                 _j, _k = j % J, k % K  # <- for u
                 xj, yk = j * h, k * h
                 f1[:, _j, _k] += FF[s, :] * delta_h(xj - XY[s, 0], h) * delta_h(yk - XY[s, 1], h) * d_theta
-                
     return f1
                 
         
@@ -36,15 +35,16 @@ def RK(X, u0, dt, h, K, J, _tension_K, d_theta, N_theta, _rho, _mu):
     
     X1 = X.copy()
     for s in range(N_theta):
-        X1[s, :] += dt * h * h * first_integration(u0, X[s, :], h, K, J)
+        X1[s, :] += dt * h * h * first_integration(u0, X[s, :], h, K, J) * 0.5
     
     F1 = _tension_K/(d_theta * d_theta) * (np.roll(X1, 1, axis=0) + np.roll(X1, -1, axis=0) - 2 * X1)
-    
+  #  plt.quiver(X[:, 0], X[:, 1], F1[:, 0], F1[:, 1])
+   # plt.show()
     f1 = second_integration(F1, X1, h, J, K, d_theta)
         
     w1 = u0 - dt / 2 * op.Suu(u0, h) + dt / (2 * _rho) * f1
     
-    u1 = inv.solver(w1, dt, _rho, _mu, K, J, h)
+    u1 = inv.solver(w1, dt, _rho, _mu, J, K, h)
     
     
     X2 = X.copy()
@@ -53,7 +53,7 @@ def RK(X, u0, dt, h, K, J, _tension_K, d_theta, N_theta, _rho, _mu):
                     
         
     w2 = u0 - dt * op.Suu(u1, h) + dt / _rho * f1 + dt * _mu / (2 * _rho) * op.L2(u0, h)            
-    u2 = inv.solver(w2, dt, _rho, _mu, K, J, h)
+    u2 = inv.solver(w2, dt, _rho, _mu, J, K, h)
     
     return X2, u2
     
