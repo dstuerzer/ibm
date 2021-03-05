@@ -16,7 +16,7 @@ def printu(u):
 # set up grid
 plotting = False
 
-h = 0.005
+h = 0.05
 x_max = 5
 y_max = 5
 
@@ -25,7 +25,7 @@ h = x_max / J
 K = int(y_max / h)
 
 # set up boundary
-N_theta = 1000
+N_theta = 100
 d_theta = 2 * np.pi / N_theta
 X = np.array([np.array([1.1*np.cos(s * d_theta) + J * h/2, np.sin(s * d_theta) + K * h /2]) for s in range(N_theta)])
 
