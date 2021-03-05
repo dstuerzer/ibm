@@ -1,0 +1,18 @@
+# santiy checks
+
+
+
+J = 15
+K = 10
+h = 0.1
+u = np.random.normal(0, 1, size=(J, K))
+Du = op.Dy(u, h)
+_Du = np.fft.fft2(Du)
+
+_u = np.fft.fft2(u)
+_D = D_hat(J, K, h)[1, ...]
+_D_u = _D * _u
+        
+print(np.linalg.norm(_Du - _D_u) / np.linalg.norm(_Du))
+
+    
