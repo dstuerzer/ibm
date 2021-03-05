@@ -83,13 +83,13 @@ def RK(X, u0, dt, h, K, J, _tension_K, d_theta, N_theta, _rho, _mu):
     F1 = _tension_K/(d_theta * d_theta) * (np.roll(X1, 1, axis=0) + np.roll(X1, -1, axis=0) - 2 * X1)
 
     f1 = second_integration(F1, X1, h, J, K, d_theta)
-    
+
     # >>>>>>>>>
  #   f1_old = second_integration_old(F1, X1, h, J, K, d_theta)
-  #  
+  #
    # print(np.linalg.norm(f1 - f1_old))
     # <<<<<<<<<<
-    
+
     w1 = u0 - dt / 2 * op.Suu(u0, h) + dt / (2 * _rho) * f1
 
     u1 = inv.solver(w1, dt, _rho, _mu, J, K, h)

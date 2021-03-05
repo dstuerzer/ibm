@@ -16,7 +16,7 @@ def dlta(r):
         return (10 - 4 * r) / 8 - fun01(r - 1)
     else:
         return 0
-    
+
 def delta_h(x,h):
     return dlta(x / h) / h
 
