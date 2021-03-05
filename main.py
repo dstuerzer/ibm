@@ -16,6 +16,14 @@ def printu(u):
 # set up grid
 plotting = True
 
+# parameters
+
+_tension_K = 1
+_mu = 0.01
+_rho = 1
+dt = 0.05
+
+
 h = 0.05
 x_max = 5
 y_max = 5
@@ -36,12 +44,7 @@ u0 = np.zeros((2, J, K))  # must be divergence-free
 u0[0, ...] = np.array([np.sin(np.pi * 2 * np.arange(K) / K) for j in range(J)])
 
 
-# parameters
 
-_tension_K = 1
-_mu = 0.01
-_rho = 1
-dt = 0.02
 if plotting:
     fig = plt.figure()
     plt.scatter(X[:, 0], X[:, 1])
@@ -62,7 +65,7 @@ for ct in range(500):
     if plotting:
         fig.clear()
         plt.pcolormesh(_x, _y, np.linalg.norm(u2, axis=0).T)    
-        plt.quiver(xy[0].T[ ::3, ::3], xy[1].T[ ::3, ::3], u2[0, ::3, ::3], u2[1,  ::3, ::3], scale=1/h)
+        plt.quiver(xy[0].T[ ::3, ::3], xy[1].T[ ::3, ::3], u2[0, ::3, ::3], u2[1,  ::3, ::3], scale=4/h)
         #plt.colorbar()
         plt.scatter(X[:, 0], X[:, 1] , s=2, color = 'black')
         plt.draw()
