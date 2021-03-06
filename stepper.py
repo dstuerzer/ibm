@@ -4,6 +4,7 @@ from delta import delta_x, delta_y
 import inverter as inv
 from matplotlib import pyplot as plt
 from time import time
+from force import Force
 
 
 def first_integration(UV, XY, h, K, J):
@@ -42,13 +43,13 @@ def second_integration(FF, XY, h, J, K, d_theta):
     return f1
 
 
-def RK(X, u0, dt, h, K, J, _tension_K, d_theta, N_theta, _rho, _mu):
+def RK(X, u0, dt, h, K, J, d_theta, N_theta, _rho, _mu, t):
 
     X1 = X.copy()
     for s in range(N_theta):
         X1[s, :] += dt * h * h * first_integration(u0, X[s, :], h, K, J) * 0.5
 
-    F1 = _tension_K/(d_theta * d_theta) * (np.roll(X1, 1, axis=0) + np.roll(X1, -1, axis=0) - 2 * X1)
+    F1 = Force(X1, d_theta, t)
 
     f1 = second_integration(F1, X1, h, J, K, d_theta)
 
