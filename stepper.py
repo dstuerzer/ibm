@@ -5,6 +5,7 @@ import inverter as inv
 from matplotlib import pyplot as plt
 from time import time
 
+
 def first_integration(UV, XY, h, K, J):
     # UV is full 2 x J x K velocity
     # XY is X(s)^n, a 2-vector
@@ -16,6 +17,7 @@ def first_integration(UV, XY, h, K, J):
     ks  = [k % K for k in range(k0-1, k0+3)]
     ux_local = np.take(np.take(UV[0, ...], jts, axis=0), ks, axis=1)
     uy_local = np.take(np.take(UV[1, ...], jts, axis=0), ks, axis=1)
+
     return np.array([np.sum(ux_local * phi), np.sum(uy_local * phi)])
 
 
@@ -23,18 +25,19 @@ def second_integration(FF, XY, h, J, K, d_theta):
     # FF == F1
     # XY == X1, our curve
     f1 = np.zeros((2, J, K))
-
-
     for s in range(FF.shape[0]):
         j0, k0 = int(XY[s, 0]/h), int(XY[s, 1]/h)
         rx, ry = XY[s, 0] - h * j0, XY[s, 1] - h * k0
         phi_x = FF[s, 0] * delta_x(rx, h) * delta_y(ry, h) * d_theta
         phi_y = FF[s, 1] * delta_x(rx, h) * delta_y(ry, h) * d_theta
-
-        jts = [j % J for j in range(j0-1, j0+3)]
-        ks = [k % K for k in range(k0-1, k0+3)]
-        f1[0][np.ix_(jts, ks)] += phi_x
-        f1[1][np.ix_(jts, ks)] += phi_y
+        _j = 0
+        for jj in [j % J for j in range(j0-1, j0+3)]:
+            _k = 0
+            for kk in [k % K for k in range(k0-1, k0+3)]:
+                f1[0][jj, kk] += phi_x[_j, _k]
+                f1[1][jj, kk] += phi_y[_j, _k]
+                _k += 1
+            _j += 1
 
     return f1
 
@@ -44,7 +47,6 @@ def RK(X, u0, dt, h, K, J, _tension_K, d_theta, N_theta, _rho, _mu):
     X1 = X.copy()
     for s in range(N_theta):
         X1[s, :] += dt * h * h * first_integration(u0, X[s, :], h, K, J) * 0.5
-
 
     F1 = _tension_K/(d_theta * d_theta) * (np.roll(X1, 1, axis=0) + np.roll(X1, -1, axis=0) - 2 * X1)
 
