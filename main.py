@@ -22,23 +22,23 @@ _mu = 0.01
 _rho = 0.1
 
 
-dt = 0.01
+dt = 0.02
 
-h = 0.05
-x_max = 5
-y_max = 5
+h = 0.07
+x_max = 4
+y_max = 2
 
 J = int(x_max / h)
 h = x_max / J
 K = int(y_max / h)
 
 # set up boundary
-N_theta = 200
+N_theta = 100
 L0 = 3
 d_theta = L0 / N_theta
 X = np.zeros((N_theta, 2))
 X[:, 0] = np.arange(0, L0, d_theta)
-X += np.array([0.5, 2.5])
+X += np.array([0.5, 1])
 
 
 
@@ -66,7 +66,7 @@ while True:
     t += dt
     
     
-    if plotting & (ct % 10 == 0):
+    if plotting & (ct % 5 == 0):
         fig.clear()
         plt.pcolormesh(_x, _y, np.linalg.norm(u2, axis=0).T)    
         plt.quiver(xy[0].T[ ::3, ::3], xy[1].T[ ::3, ::3], u2[0, ::3, ::3], u2[1,  ::3, ::3], scale=4/h)
