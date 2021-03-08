@@ -49,7 +49,7 @@ def RK(X, u0, dt, h, K, J, d_theta, N_theta, _rho, _mu, t):
     for s in range(N_theta):
         X1[s, :] += dt * h * h * first_integration(u0, X[s, :], h, K, J) * 0.5
 
-    F1 = Force(X1, d_theta, t)
+    F1, DD = Force(X1, d_theta, t)
 
     f1 = second_integration(F1, X1, h, J, K, d_theta)
 
@@ -65,7 +65,7 @@ def RK(X, u0, dt, h, K, J, d_theta, N_theta, _rho, _mu, t):
 
     u2 = inv.solver(w2, dt, _rho, _mu, J, K, h)
 
-    return X2, u2
+    return X2, u2, DD
 
 
 
