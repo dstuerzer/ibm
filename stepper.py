@@ -2,8 +2,6 @@ import numpy as np
 import operators as op
 from delta import delta_x, delta_y
 import inverter as inv
-from matplotlib import pyplot as plt
-from time import time
 from force import Force
 
 
@@ -43,13 +41,13 @@ def second_integration(FF, XY, h, J, K, d_theta):
     return f1
 
 
-def RK(X, u0, dt, h, K, J, d_theta, N_theta, _rho, _mu, t):
+def RK(X, u0, dt, h, K, J, d_theta, N_theta, _rho, _mu, dict_of_targets):
 
     X1 = X.copy()
     for s in range(N_theta):
         X1[s, :] += dt * h * h * first_integration(u0, X[s, :], h, K, J) * 0.5
 
-    F1, DD = Force(X1, d_theta, t)
+    F1 = Force(X1, d_theta, dict_of_targets)
 
     f1 = second_integration(F1, X1, h, J, K, d_theta)
 
@@ -65,7 +63,7 @@ def RK(X, u0, dt, h, K, J, d_theta, N_theta, _rho, _mu, t):
 
     u2 = inv.solver(w2, dt, _rho, _mu, J, K, h)
 
-    return X2, u2, DD
+    return X2, u2
 
 
 
