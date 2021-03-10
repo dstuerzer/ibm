@@ -27,10 +27,10 @@ def F_bending(X, dq):
     return np.array(-bending_K / (dq * dq) * (C_ex[2:, :] + C_ex[:-2, :] - 2 * C_ex[1:-1, :]))
     
 def F_tether(X, dq, dict_of_targets):
-    tether_K = 5
+    tether_K = 50
     f_tether = [np.array([0, 0]) for _ in range(X.shape[0])]
     for i, Z in dict_of_targets.items():
-        f_tether[i] = -tether_K * X[i, :] - Z
+        f_tether[i] = -tether_K * (X[i, :] - Z)
         
     return np.array(f_tether)
     
