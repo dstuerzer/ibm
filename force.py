@@ -9,7 +9,7 @@ import numpy as np
 
 
 def F_tension(X, dq):
-    tension_K = 1
+    tension_K = 50
     N = X.shape[0]
     
     norms = [np.linalg.norm(X[s+1, :] - X[s, :]) for s in range(N-1)]
@@ -22,12 +22,14 @@ def F_tension(X, dq):
 
 def F_bending(X, dq):
     bending_K = 0.1
+    if bending_K <= 0.0:
+        return np.zeros(X.shape)
     Ck = (X[2:, :] + X[:-2, :] - 2 * X[1:-1, :]) / (dq * dq)
     C_ex = np.array([np.array([0, 0]), np.array([0, 0])] + list(Ck) + [np.array([0, 0]), np.array([0, 0])])
     return np.array(-bending_K / (dq * dq) * (C_ex[2:, :] + C_ex[:-2, :] - 2 * C_ex[1:-1, :]))
     
 def F_tether(X, dq, dict_of_targets):
-    tether_K = 50
+    tether_K = 100
     f_tether = [np.array([0, 0]) for _ in range(X.shape[0])]
     for i, Z in dict_of_targets.items():
         f_tether[i] = -tether_K * (X[i, :] - Z)

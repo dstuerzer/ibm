@@ -50,6 +50,9 @@ def RK(X, u0, dt, h, K, J, d_theta, N_theta, _rho, _mu, dict_of_targets):
     F1 = Force(X1, d_theta, dict_of_targets)
 
     f1 = second_integration(F1, X1, h, J, K, d_theta)
+    
+    # gravity 
+    f1[0, ...] = f1[0, ...] + 0.1
 
     w1 = u0 - dt / 2 * op.Suu(u0, h) + dt / (2 * _rho) * f1
 
