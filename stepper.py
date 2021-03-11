@@ -14,9 +14,17 @@ def first_integration(UV, XY, h, K, J):
 
     jts = [j % J for j in range(j0-1, j0+3)]
     ks  = [k % K for k in range(k0-1, k0+3)]
-    ux_local = np.take(np.take(UV[0, ...], jts, axis=0), ks, axis=1)
-    uy_local = np.take(np.take(UV[1, ...], jts, axis=0), ks, axis=1)
 
+    ux_local = np.zeros((4,4))
+    uy_local = np.zeros((4,4))
+    _j = 0
+    for j in jts:
+        _k = 0
+        for k in ks:
+            ux_local[_j, _k] = UV[0, j, k]
+            uy_local[_j, _k] = UV[1, j, k]
+            _k += 1
+        _j += 1
     return np.array([np.sum(ux_local * phi), np.sum(uy_local * phi)])
 
 
