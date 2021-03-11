@@ -5,34 +5,31 @@ import inverter as inv
 from force import Force
 
 
+
+
 def first_integration(UV, XY, h, K, J):
     # UV is full 2 x J x K velocity
     # XY is X(s)^n, a 2-vector
     j0, k0 = int(XY[0]/h), int(XY[1]/h)
     rx, ry = XY[0] - h * j0, XY[1] - h * k0
-
+  
     zx = delta_z(rx, h)
     zy = delta_z(ry, h)
-    phi = np.zeros((4,4))
-    for j in range(4):
-        for k in range(4):
-            phi[j,k] = zx[j] * zy[k] / (h * h)
 
     jts = [j % J for j in range(j0-1, j0+3)]
     ks  = [k % K for k in range(k0-1, k0+3)]
-
-    ux_local = np.zeros((4,4))
-    uy_local = np.zeros((4,4))
+    sumx, sumy = 0, 0
     _j = 0
     for j in jts:
         _k = 0
         for k in ks:
-            ux_local[_j, _k] = UV[0, j, k]
-            uy_local[_j, _k] = UV[1, j, k]
+            phi_j_k = zx[_j] * zy[_k] / (h * h)
+            sumx += UV[0, j, k] * phi_j_k
+            sumy += UV[1, j, k] * phi_j_k
             _k += 1
         _j += 1
-    return np.array([np.sum(ux_local * phi), np.sum(uy_local * phi)])
-
+     
+    return np.array([sumx, sumy])
 
 def second_integration(FF, XY, h, J, K, d_theta):
     # FF == F1
