@@ -18,12 +18,12 @@ plotting = True
 
 # parameters
 
-_mu = 0.01
+_mu = 0.003
 _rho = 0.1
 
 
 # GRID etc
-dt = 0.0003
+dt = 0.0001
 
 h = 0.05
 x_max = 5
@@ -34,8 +34,8 @@ h = x_max / J
 K = int(y_max / h)
 
 # set up boundary
-Z0 = np.array([0.5, 1.8])
-Z1 = np.array([2.0, 2.2])
+Z0 = np.array([0.5, 1.4])
+Z1 = np.array([1.7, 2.4])
 
 N_theta = 50
 tick = np.linspace(0,1, N_theta)
@@ -50,7 +50,7 @@ tether = {0:Z0, N_theta-1:Z1}
 
 # setup initial conditions
 u0 = np.zeros((2, J, K))  # must be divergence-free
-u0[0, ...] = np.array([np.sin(np.pi * np.arange(K) / K) for j in range(J)])
+#u0[0, ...] = np.array([np.sin(np.pi * np.arange(K) / K) for j in range(J)])
 
 
 
