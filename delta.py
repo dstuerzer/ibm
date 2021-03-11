@@ -12,3 +12,9 @@ def delta_x(rr, h):
 
 def delta_y(r, h):
     return delta_x(r, h).T
+
+def delta_z(rr, h):
+    r = rr / h
+    q = (3 - 2 * r + np.sqrt(1 + 4 * r - 4 * r * r)) / 8
+    z = [(6 - 4 * r) / 8 - q, q, (4 * r - 2) / 8 + q, 0.5 - q]
+    return z
