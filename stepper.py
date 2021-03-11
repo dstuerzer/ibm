@@ -1,6 +1,6 @@
 import numpy as np
 import operators as op
-from delta import delta_x, delta_y
+from delta import delta_x, delta_y, delta_z
 import inverter as inv
 from force import Force
 
@@ -10,7 +10,13 @@ def first_integration(UV, XY, h, K, J):
     # XY is X(s)^n, a 2-vector
     j0, k0 = int(XY[0]/h), int(XY[1]/h)
     rx, ry = XY[0] - h * j0, XY[1] - h * k0
-    phi = delta_x(rx, h) * delta_y(ry, h)
+
+    zx = delta_z(rx, h)
+    zy = delta_z(ry, h)
+    phi = np.zeros((4,4))
+    for j in range(4):
+        for k in range(4):
+            phi[j,k] = zx[j] * zy[k] / (h * h)
 
     jts = [j % J for j in range(j0-1, j0+3)]
     ks  = [k % K for k in range(k0-1, k0+3)]
